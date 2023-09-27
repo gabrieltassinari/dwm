@@ -1,4 +1,5 @@
 /* See LICENSE file for copyright and license details. */
+#include <X11/XF86keysym.h>
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
@@ -11,8 +12,8 @@ static const unsigned int gappov    = 10;       /* vert outer gap between window
 static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[]          = { "Liberation Mono:size=10" };
+static const char dmenufont[]       = "Liberation Mono:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -43,7 +44,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
@@ -66,16 +67,26 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "alacritty", NULL };
-static const char *browser[] = { "/usr/bin/firefox", NULL };
-static const char *spotify[] = {"/usr/bin/spotify", NULL};
+static const char *dmenucmd[] 	= { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *termcmd[] 	= { "alacritty", NULL };
+static const char *browser[] 	= { "/usr/bin/firefox", NULL };
+static const char *spotify[] 	= { "/usr/bin/spotify", NULL };
+static const char *minecraft[] 	= { "/home/gear/.local/bin/minecraft", NULL };
+static const char *screenshot[] = { "/home/gear/.config/scripts/screenshot", NULL };
+static const char *kblayout[] = { "/home/gear/.config/scripts/kblayout", NULL };
+
+static const char *volup[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%", NULL };
+static const char *voldown[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%", NULL };
+static const char *volmute[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "toggle", NULL };
+static const char *micmute[] = { "pactl", "set-source-mute", "0", "toggle", NULL };
+
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,		XK_f,	   spawn, 	   {.v = browser } },
 	{ MODKEY|ShiftMask, 		XK_s,	   spawn,	   {.v = spotify } },
+	{ MODKEY|ShiftMask, 		XK_m,	   spawn,	   {.v = minecraft } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -83,8 +94,6 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	//{ MODKEY|Mod4Mask,              XK_h,      incrgaps,       {.i = +1 } },
-	//{ MODKEY|Mod4Mask,              XK_l,      incrgaps,       {.i = -1 } },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_h,      incrogaps,      {.i = +1 } },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_l,      incrogaps,      {.i = -1 } },
 	{ MODKEY|Mod4Mask|ControlMask,  XK_h,      incrigaps,      {.i = +1 } },
@@ -123,6 +132,12 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ShiftMask,		XK_k,			 spawn, {.v = kblayout } },
+	{ 0,				XK_Print,   		 spawn,	{.v = screenshot } },
+	{ 0,				XF86XK_AudioRaiseVolume, spawn, {.v = volup } },
+	{ 0,				XF86XK_AudioLowerVolume, spawn, {.v = voldown } },
+	{ 0,				XF86XK_AudioMicMute,	 spawn, {.v = micmute } },
+	{ 0,				XF86XK_AudioMute,        spawn, {.v = volmute } },
 };
 
 /* button definitions */
