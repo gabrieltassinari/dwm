@@ -75,10 +75,12 @@ static const char *minecraft[] 	= { "/home/gear/.local/bin/minecraft", NULL };
 static const char *screenshot[] = { "/home/gear/.config/scripts/screenshot", NULL };
 static const char *kblayout[] = { "/home/gear/.config/scripts/kblayout", NULL };
 
-static const char *volup[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%", NULL };
-static const char *voldown[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%", NULL };
-static const char *volmute[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "toggle", NULL };
+static const char *volumeu[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%", NULL };
+static const char *volumed[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%", NULL };
+static const char *volumem[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "toggle", NULL };
 static const char *micmute[] = { "pactl", "set-source-mute", "0", "toggle", NULL };
+static const char *brightu[] = { "/usr/bin/brillo", "-q", "-A", "5", NULL };
+static const char *brightd[] = { "/usr/bin/brillo", "-q", "-U", "5", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -132,12 +134,14 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	{ MODKEY|ShiftMask,		XK_k,			 spawn, {.v = kblayout } },
-	{ 0,				XK_Print,   		 spawn,	{.v = screenshot } },
-	{ 0,				XF86XK_AudioRaiseVolume, spawn, {.v = volup } },
-	{ 0,				XF86XK_AudioLowerVolume, spawn, {.v = voldown } },
-	{ 0,				XF86XK_AudioMicMute,	 spawn, {.v = micmute } },
-	{ 0,				XF86XK_AudioMute,        spawn, {.v = volmute } },
+	{ MODKEY|ShiftMask,		XK_k,			  spawn, {.v = kblayout } },
+	{ 0,				XK_Print,   		  spawn, {.v = screenshot } },
+	{ 0,				XF86XK_MonBrightnessUp,   spawn, {.v = brightu } },
+	{ 0,				XF86XK_MonBrightnessDown, spawn, {.v = brightd } },
+	{ 0,				XF86XK_AudioRaiseVolume,  spawn, {.v = volumeu } },
+	{ 0,				XF86XK_AudioLowerVolume,  spawn, {.v = volumed } },
+	{ 0,				XF86XK_AudioMicMute,	  spawn, {.v = micmute } },
+	{ 0,				XF86XK_AudioMute,         spawn, {.v = volumem } },
 };
 
 /* button definitions */
